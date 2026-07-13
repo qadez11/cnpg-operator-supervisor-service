@@ -1,0 +1,16 @@
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:data", "data")
+
+#! Point CNPG admission webhooks at the Supervisor Service namespace.
+
+#@ def is_cnpg_webhook(index, left, right):
+#@   return "kind" in left and left["kind"] in ["MutatingWebhookConfiguration", "ValidatingWebhookConfiguration"] and "metadata" in left and "name" in left["metadata"] and left["metadata"]["name"].startswith("cnpg-")
+#@ end
+
+#@overlay/match by=is_cnpg_webhook, expects="0+"
+---
+webhooks:
+#@overlay/match by=overlay.all, expects="0+"
+- clientConfig:
+    service:
+      namespace: #@ data.values.namespace

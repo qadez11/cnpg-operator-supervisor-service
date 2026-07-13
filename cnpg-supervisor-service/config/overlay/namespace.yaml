@@ -1,0 +1,35 @@
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:data", "data")
+
+#! Move the upstream cnpg-system installation into the Supervisor Service namespace.
+
+#@overlay/match by=overlay.subset({"kind": "Namespace", "metadata": {"name": "cnpg-system"}}), expects=1
+---
+metadata:
+  name: #@ data.values.namespace
+  labels:
+    #@overlay/match missing_ok=True
+    pod-security.kubernetes.io/enforce: privileged
+  #@overlay/match missing_ok=True
+  annotations:
+    #@overlay/match missing_ok=True
+    vmware-system-service-id: cnpg
+
+#@ def has_cnpg_namespace(index, left, right):
+#@   return "metadata" in left and "namespace" in left["metadata"] and left["metadata"]["namespace"] == "cnpg-system"
+#@ end
+
+#@overlay/match by=has_cnpg_namespace, expects="0+"
+---
+metadata:
+  namespace: #@ data.values.namespace
+
+#@ def has_serviceaccount_subjects(index, left, right):
+#@   return "kind" in left and left["kind"] in ["RoleBinding", "ClusterRoleBinding"] and "subjects" in left
+#@ end
+
+#@overlay/match by=has_serviceaccount_subjects, expects="0+"
+---
+subjects:
+#@overlay/match by=lambda idx,left,right: "kind" in left and left["kind"] == "ServiceAccount", expects="0+"
+- namespace: #@ data.values.namespace

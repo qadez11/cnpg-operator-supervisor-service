@@ -1,0 +1,25 @@
+---
+apiVersion: imgpkg.carvel.dev/v1alpha1
+images:
+- annotations:
+    kbld.carvel.dev/id: ghcr.io/cloudnative-pg/cloudnative-pg:1.30.0
+    kbld.carvel.dev/origins: |
+      - resolved:
+          tag: 1.30.0
+          url: ghcr.io/cloudnative-pg/cloudnative-pg:1.30.0
+  image: ghcr.io/cloudnative-pg/cloudnative-pg@sha256:a2701eb97cdd2a34b1fdb2cb51987f544b706e40bec72ae7146cd8580efefebb
+- annotations:
+    kbld.carvel.dev/id: ghcr.io/cloudnative-pg/plugin-barman-cloud:v0.13.0
+    kbld.carvel.dev/origins: |
+      - resolved:
+          tag: v0.13.0
+          url: ghcr.io/cloudnative-pg/plugin-barman-cloud:v0.13.0
+  image: ghcr.io/cloudnative-pg/plugin-barman-cloud@sha256:71589dbac582333442812b07b31f7ea4d00324a8358aac7ca507dabf9f4b6c96
+- annotations:
+    kbld.carvel.dev/id: ghcr.io/cloudnative-pg/plugin-barman-cloud-sidecar:v0.13.0
+    kbld.carvel.dev/origins: |
+      - resolved:
+          tag: v0.13.0
+          url: ghcr.io/cloudnative-pg/plugin-barman-cloud-sidecar:v0.13.0
+  image: ghcr.io/cloudnative-pg/plugin-barman-cloud-sidecar@sha256:990361af3319f9e23aafa0f6d7981f99bf1f69b4e6a85cf1bc7d71d6f09bb288
+kind: ImagesLock

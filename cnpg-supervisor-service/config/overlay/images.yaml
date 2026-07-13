@@ -1,0 +1,11 @@
+#@ load("@ytt:overlay", "overlay")
+#! Expose the Barman sidecar image to kbld. Upstream stores it as base64 Secret
+#! data, which kbld cannot rewrite through ImagesLock.
+
+#@overlay/match by=overlay.subset({"kind": "Secret", "metadata": {"name": "plugin-barman-cloud-m5m67kfh8f"}}), expects=1
+---
+#@overlay/remove
+data:
+#@overlay/match missing_ok=True
+stringData:
+  SIDECAR_IMAGE: ghcr.io/cloudnative-pg/plugin-barman-cloud-sidecar:v0.13.0

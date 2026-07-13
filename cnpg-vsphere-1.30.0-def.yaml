@@ -1,0 +1,57 @@
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: Package
+metadata:
+  annotations:
+    appplatform.vmware.com/requires-ha-supervisor: "true"
+  name: cnpg.fling.vsphere.vmware.com.1.30.0+0.13.0
+spec:
+  refName: cnpg.fling.vsphere.vmware.com
+  version: 1.30.0+0.13.0
+  licenses:
+  - Apache 2.0
+  includedSoftware:
+  - displayName: CloudNativePG
+    version: 1.30.0
+    description: CloudNativePG operator
+  - displayName: Barman Cloud Plugin
+    version: 0.13.0
+    description: CloudNativePG Barman Cloud plugin and sidecar
+  template:
+    spec:
+      fetch:
+      - imgpkgBundle:
+          image: harbor.itnovel.ru/vsphere/cnpg-supervisor-service:1.30.0-barman-0.13.0
+      template:
+      - ytt:
+          paths:
+          - config/
+      - kbld:
+          paths:
+          - '-'
+          - .imgpkg/images.yml
+      deploy:
+      - kapp: {}
+  valuesSchema:
+    openAPIv3:
+      type: object
+      additionalProperties: false
+      properties:
+        namespace:
+          type: string
+          description: The namespace in which to deploy CloudNativePG and the Barman Cloud plugin
+          default: svc-cnpg
+---
+apiVersion: data.packaging.carvel.dev/v1alpha1
+kind: PackageMetadata
+metadata:
+  name: cnpg.fling.vsphere.vmware.com
+spec:
+  displayName: CloudNativePG Supervisor Service
+  longDescription: CloudNativePG Supervisor Service installs the CloudNativePG operator together with the Barman Cloud plugin on vSphere Supervisor clusters.
+  shortDescription: Installs CloudNativePG and the Barman Cloud plugin on vSphere Supervisor clusters
+  providerName: VMware
+  maintainers:
+  - name: ITNovel
+  categories:
+  - database
+  - backup

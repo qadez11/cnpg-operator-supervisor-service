@@ -1,0 +1,8 @@
+---
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+searchRules:
+- keyMatcher:
+    name: SIDECAR_IMAGE
+- valueMatcher:
+    imageRepo: ghcr.io/cloudnative-pg/cloudnative-pg
