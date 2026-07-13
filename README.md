@@ -24,6 +24,7 @@ cnpg-supervisor-service/
       cnpg-1.30.0.yaml
       plugin-barman-cloud-0.13.0.yaml
     overlay/
+      authenticated_registry.yaml
       images.yaml
       kbld-config.yaml
       namespace.yaml
@@ -53,6 +54,22 @@ Locked images:
 - `ghcr.io/cloudnative-pg/cloudnative-pg:1.30.0`
 - `ghcr.io/cloudnative-pg/plugin-barman-cloud:v0.13.0`
 - `ghcr.io/cloudnative-pg/plugin-barman-cloud-sidecar:v0.13.0`
+
+## Private Registry
+
+For private or air-gapped Supervisor depots, the bundle creates an image pull secret:
+
+```text
+cnpg-service-registry-creds
+```
+
+The secret is annotated with:
+
+```yaml
+secretgen.carvel.dev/image-pull-secret: ""
+```
+
+All operator Deployments receive this secret through `imagePullSecrets`.
 
 ## Render Check
 
